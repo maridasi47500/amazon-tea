@@ -1,12 +1,17 @@
-<h1># amazon-tea</h1>
-<div>
-quote
-<textarea>
+{% extends 'base.html' %}
 
-</textarea>
-</div>
-<p>
-author
-<input name="person"/>
-</p>
-<button> detecter if author of quote woman/man</button>
+{% block montitre %}
+debut de mes mots: fake or true employee
+{% endblock %}
+{% block content %}
+<h1># amazon-tea</h1>
+{% for x in users | reverse %}
+ <li>{{ x["first_name"]  }}</li>
+
+{% endfor %} 
+fin de mes mots : si tu es un faux employé : quelle est cette photo? etes vous allé là bas ? est-ce que cest une fausse destination ? ça ne doit pas être la vrai destination. la photo de profil peut être masquée avec des lunettes de soleil. Si tu es un employé , tu postes tes photos.
+{% endblock %}
+{% block liens %}
+<a href="/">welcome</a>
+{% endblock %}
+<a href="/add_one_user"> add one user</a><a href="/add_one_country"> add one country</a><a href="/add_one_quotes"> add one quotes</a><a href="/add_one_songs"> add one songs</a><a href="/add_one_artists"> add one artists</a><a href="/add_one_photo_posted"> add one photo_posted</a>
