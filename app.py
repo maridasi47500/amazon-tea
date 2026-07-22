@@ -30,7 +30,14 @@ def add_one_user():
     if request.method == 'POST':
 
         the_username = "anonyme"
-        one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic)",request.form)
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            uploaded_file.save(os.path.join('static/photos', uploaded_file.filename))
+        hey=dict(request.form)
+        hey["pic"]=uploaded_file.filename
+
+
+        one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic)",hey)
         user = query_db('select * from user')
         return render_template("userform.html", users=user, one_user=one_user, the_title="add new user")
     user = query_db('select * from user')
