@@ -5,6 +5,13 @@ debut de mes mots: fake or true employee
 {% endblock %}
 {% block content %}
 <h1># amazon-tea</h1>
+<p>
+{% if connected == "" %}
+<a href="/add_new_user">se conecter</a>
+{%else%}
+<b>{{connected}}</b> est connecté.
+{%endif%}
+</p>
 {% for x in users | reverse %}
  <li>{{ x["first_name"]  }}</li>
 

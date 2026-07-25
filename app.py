@@ -23,9 +23,13 @@ def close_connection(exception):
 def hello_world():
     user = query_db('select * from contacts')
     the_username = "anonyme"
+    try:
+       connected=session["username"]
+    except:
+       connected=""
     one_user = query_db('select * from contacts where first_name = ?',
                 [the_username], one=True)
-    return render_template("hey.html", users=user, one_user=one_user, the_title="my title")
+    return render_template("hey.html", users=user, one_user=one_user, the_title="my title",connected=connected)
 @app.route("/add_one_user", methods=["GET","POST"])
 def add_one_user():
 
