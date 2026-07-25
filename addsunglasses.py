@@ -1,9 +1,13 @@
 import cv2
+import os
 import numpy as np
+from sys import argv
 
 def detect_face(image_path):
     # Load the face detection classifier
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    #face_cascade = cv2.CascadeClassifier()
+    #face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('./' + 'haarcascade_frontalface_default.xml')
 
     # Read the input image
     image = cv2.imread(image_path)
@@ -20,9 +24,9 @@ def detect_face(image_path):
     else:
         return None
 
-def main():
+def hellomain(mypic):
     # Path to the input photo
-    image_path = 'path_to_your_photo.jpg'
+    image_path = mypic#'path_to_your_photo.jpg'
 
     # Load the photo
     image = cv2.imread(image_path)
@@ -34,7 +38,7 @@ def main():
         return
 
     # Load the sunglass image with an alpha channel (transparency)
-    sunglass_img = cv2.imread('path_to_sunglass_image.png', cv2.IMREAD_UNCHANGED)
+    sunglass_img = cv2.imread('lunette6.png', cv2.IMREAD_UNCHANGED)
 
     # Check if the sunglass image was successfully loaded
     if sunglass_img is None:
@@ -61,10 +65,16 @@ def main():
     # Replace the ROI in the original image with the sunglass overlay
     image[face_coords[1]:face_coords[1]+face_height, face_coords[0]:face_coords[0]+face_width] = overlay
 
+    print(image_path)
+    cv2.imwrite(image_path, image)
+#cv2.imwrite(path,img_to_save)
+
     # Display the result
     cv2.imshow('Sunglass Overlay', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    main()
+    print("./static/photos/"+argv[1])
+    print(os.path.join("./static/photos",argv[1]))
+    hellomain("./static/photos/"+argv[1])

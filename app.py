@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+import os
+import subprocess
 from yourappdb import query_db, get_db
 from flask import g
 
@@ -29,12 +31,29 @@ def add_one_user():
 
     if request.method == 'POST':
 
+        print(request.form)
+        print(request.files)
+        x=request.form
+        uploaded_file = request.files['pic']
+        print(uploaded_file)
+        hey=dict(x)
+        print(hey)
+        print(hey["employeetype"])
+        print(hey["employeetype"] == "fake")
         the_username = "anonyme"
-        uploaded_file = request.files['file']
+
+
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static/photos', uploaded_file.filename))
-        hey=dict(request.form)
+
         hey["pic"]=uploaded_file.filename
+
+        if hey["employeetype"] == "fake":
+            try:
+                x=subprocess.Popen(["/usr/bin/python3.8","addsunglasses.py",hey["pic"]])
+            except Exception as e:
+                print("ereeeuuuuur!!! ooowow!",e)
+
 
 
         one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic)",hey)
@@ -108,4 +127,13 @@ def add_one_photo_posted():
     user = query_db('select * from photo_posted')
     one_user = query_db("select * from photo_posted limit 1", one=True)
     return render_template("photo_postedform.html", photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
+
+
+if __name__ == '__main__':
+    from sys import argv
+
+    if len(argv) == 2:
+        app.run("localhost",port=int(argv[1]))
+    else:
+        app.run()
 

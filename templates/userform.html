@@ -1,5 +1,36 @@
-{% extends 'base.html' %}{% block content %}<form method="POST"><div class="field"><label>username</label><input name="username"/></div><div class="field"><label>email</label><input name="email"/></div><div class="field"><label>phone</label><input name="phone"/></div><div class="field"><label>country_id</label><input name="country_id"/></div><div class="field"><label>fm</label><input name="fm"/></div><div class="field"><label>employeetype</label><input name="employeetype"/></div><div class="field">
+{% extends 'base.html' %}{% block content %}<form  enctype="multipart/form-data"  method="POST"><div class="field"><label>username</label><input name="username"/></div><div class="field"><label>email</label><input name="email"/></div><div class="field"><label>phone</label><input name="phone"/></div><div class="field"><label>country_id</label><input name="country_id"/></div><div class="field"><label>fm</label>
+
+<select name="fm">
+<option value="f"> femme</option>
+<option value="m"> homme</option>
+</select>
+
+</div><div class="field"><label>employeetype</label>
+
+<select name="employeetype">
+<option value="real"> "real" employee or average employee</option>
+<option value="fake"> "fake" or hacker employee</option>
+</select>
+</div><div class="field">
 
 <label>pic</label><input type="file" name="pic"/>
 
-</div><div class="actions"><input type="submit"/></div></form>{% for x in users %}{{x["username"] }}{% endfor %}{% endblock %}{% block liens %}<a href="/">bienvenue</a><a href="/add_one_user"> add one user</a>{% endblock %}
+</div><div class="actions"><input type="submit"/></div></form>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+{% for x in users %}
+  <div class="col">
+    <div class="card">
+      <img src="/static/photos/{{x["pic"] }}" class="card-img-top" alt="{{ x["employeetype"] }}">
+      <div class="card-body">
+        <h5 class="card-title">{{ x["employeetype"] }} employee</h5>
+        <p class="card-text">{{ "femme" if x["fm"] == "f" else "masculin" }}{{ x["username"] }}</p>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endfor %}
+  </div>
+
+{% endblock %}{% block liens %}<a href="/">bienvenue</a><a href="/add_one_user"> add one user</a>{% endblock %}
