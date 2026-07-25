@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 import os
 import subprocess
 from yourappdb import query_db, get_db
@@ -29,7 +29,10 @@ def hello_world():
 @app.route("/add_one_user", methods=["GET","POST"])
 def add_one_user():
 
-    if request.method == 'POST':
+    user = query_db('select * from user')
+    one_user = query_db("select * from user limit 1", one=True)
+
+    if request.method == 'POST' and request.form["password"] == request.form["password_confirmation"]:
 
         print(request.form)
         print(request.files)
@@ -43,10 +46,12 @@ def add_one_user():
         the_username = "anonyme"
 
 
+
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static/photos', uploaded_file.filename))
 
         hey["pic"]=uploaded_file.filename
+        one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic,password) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic,:password)",hey)
 
         if hey["employeetype"] == "fake":
             try:
@@ -56,11 +61,14 @@ def add_one_user():
 
 
 
-        one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic)",hey)
-        user = query_db('select * from user')
+
+        session['username'] = request.form['username']
+        print("bug")
+        return redirect("/?registered=true")
+    elif request.method == 'POST':
+
         return render_template("userform.html", users=user, one_user=one_user, the_title="add new user")
-    user = query_db('select * from user')
-    one_user = query_db("select * from user limit 1", one=True)
+
     return render_template("userform.html", users=user, one_user=one_user, the_title="add new user")
 
 @app.route("/add_one_country", methods=["GET","POST"])

@@ -1,4 +1,6 @@
 # amazon-tea
+- télécharge le haarcascade_frontalface_default.xml et copie le à la racine
+- ajoute un (e) nouvelle utilisateur pour te connecter
 choisis un sport un quote
 - une quote, qui a nom personne, m/f, job
 - serveur songs detct artist f/ m

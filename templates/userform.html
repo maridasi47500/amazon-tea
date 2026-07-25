@@ -1,4 +1,12 @@
-{% extends 'base.html' %}{% block content %}<form  enctype="multipart/form-data"  method="POST"><div class="field"><label>username</label><input name="username"/></div><div class="field"><label>email</label><input name="email"/></div><div class="field"><label>phone</label><input name="phone"/></div><div class="field"><label>country_id</label><input name="country_id"/></div><div class="field"><label>fm</label>
+{% extends 'base.html' %}{% block content %}
+<h2>s'inscrire à Amazon Tea</h2>
+<form  enctype="multipart/form-data"  method="POST"><div class="field"><label>username</label><input name="username"/></div><div class="field"><label>email</label><input name="email"/></div><div class="field"><label>phone</label><input name="phone"/></div>
+
+<div class="field"><label>country_id</label><input name="country_id"/></div>
+<div class="field"><label>password</label><input type="password" name="password"/></div>
+<div class="field"><label>password confirmation</label><input type="password" name="password_confirmation"/></div>
+
+<div class="field"><label>fm</label>
 
 <select name="fm">
 <option value="f"> femme</option>

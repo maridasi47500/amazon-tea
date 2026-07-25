@@ -33,6 +33,7 @@ create table if not exists user(
             phone text,
             country_id text,
             fm text,
+            password text,
             employeetype text,
             pic text
                     );
@@ -40,6 +41,11 @@ create table if not exists country(
         id integer primary key autoincrement,
         name text
                     );
+insert into country (name) values ('france');
+insert into country (name) values ('espagne');
+insert into country (name) values ('italie');
+insert into country (name) values ('allemagne');
+insert into country (name) values ('royaume-uni');
 create table if not exists quotes(
         id integer primary key autoincrement,
         name text,
