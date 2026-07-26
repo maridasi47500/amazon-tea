@@ -5,6 +5,7 @@ from yourappdb import query_db, get_db
 from flask import g
 
 app = Flask(__name__)
+app.secret_key="wow"
 def init_db():
     with app.app_context():
         db = get_db()
@@ -67,6 +68,7 @@ def add_one_user():
 
 
         session['username'] = request.form['username']
+        session['employeetype'] = request.form['employeetype']
         print("bug")
         return redirect("/?registered=true")
     elif request.method == 'POST':
@@ -129,16 +131,20 @@ def add_one_artists():
 
 @app.route("/add_one_photo_posted", methods=["GET","POST"])
 def add_one_photo_posted():
+    try:
+       mytype=session["employeetype"]
+    except:
+       mytype=""
 
     if request.method == 'POST':
 
         the_username = "anonyme"
         one_user = query_db("insert into photo_posted (pic,user_id) values (:pic,:user_id)",request.form)
         user = query_db('select * from photo_posted')
-        return render_template("photo_postedform.html", photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
+        return render_template("photo_postedform.html", mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
     user = query_db('select * from photo_posted')
     one_user = query_db("select * from photo_posted limit 1", one=True)
-    return render_template("photo_postedform.html", photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
+    return render_template("photo_postedform.html", mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
 
 
 if __name__ == '__main__':
