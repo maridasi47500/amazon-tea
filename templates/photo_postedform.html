@@ -1,14 +1,48 @@
-{% extends 'base.html' %}{% block content %}<form method="POST">
+{% extends 'base.html' %}{% block content %}
+
+<h1>
+poster une photo 
+</h1>
+{% if userid != "": %}
+<form  enctype="multipart/form-data"  method="POST">
 
 <div class="field"><label>pic
 {% if mytype != "": %}
 {% if mytype == "fake": %}
-<p>attention , pour un fake user, il vaut mieux ne pas publier ses photos. Avez vous été là ? Ne publiez pas de vraies photos, ajouter des photos dans de plus beaux endroits que la réalité ou des photos retouchées.</p>
+<p>attention , pour un <b>fake</b> user, il vaut mieux ne pas publier ses photos. Avez vous été là ? Ne publiez pas de vraies photos, ajouter des photos dans de plus beaux endroits que la réalité ou des photos retouchées.</p>
 {% else: %}
-<p>attention , pour un real user, il vaut mieux publier vos photos sans retouche. Avez vous été là ? Publiez vos vraies photos, ajouter des photos où vous avez été, authentique.</p>
+<p>attention , pour un <b>real</b> user, il vaut mieux publier vos photos sans retouche. Avez vous été là ? Publiez vos vraies photos, ajouter des photos où vous avez été, authentique.</p>
 {% endif  %}
 {% endif  %}
 
 </label><input name="pic" type="file" /></div>
+<div class="field"><label>localisation
 
-<div class="field"><label>user_id</label><input name="user_id"/></div><div class="actions"><input type="submit"/></div></form>{% for x in photo_posteds %}{{x["pic"] }}{% endfor %}{% endblock %}{% block liens %}<a href="/">bienvenue</a><a href="/add_one_photo_posted"> add one photo_posted</a>{% endblock %}
+</label><input name="location"  /></div>
+
+<div class="field"><input type="hidden" value="{{ userid }}" name="user_id"/></div><div class="actions"><input type="submit"/></div></form>
+{%else: %}
+<p>vous n'êtes pas connecté(e) vous ne pouvez pas ajouter de photos, poster de ffausses photos et ne révelez surtout pas votre identité quand vuos êtes un faux user.</p>
+{% endif %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+{% for x in photo_posteds %}
+  <div class="col">
+    <div class="card">
+      <img src="/static/photos/{{x["pic"] }}" class=" responsive card-img-top" alt="{{ x["employeetype"] }}">
+      <div class="card-body">
+        <h5 class="card-title">photo d'un{{ "e" if x["fm"] == "f" else "" }} {{ x["employeetype"] }} user</h5>
+        <p class="card-text">{{ "la femme" if x["fm"] == "f" else "l'homme" }} {{ x["username"] }} a posté cette photo</p>
+        <p class="card-text">{{ x["username"] }} {{ "a peut-être publié une fausse photo et n'a probablement jamais été à" + x["location"] if x["employeetype"] == "fake" else "a probablement déjà été à " + x["location"] }}</p>
+<p> {{ x["username"] }} a posté cette photo</p>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endfor %}
+  </div>
+
+
+
+{% for x in photo_posteds %}{{x["pic"] }}{% endfor %}{% endblock %}{% block liens %}<a href="/">bienvenue</a><a href="/add_one_photo_posted"> add one photo_posted</a>{% endblock %}

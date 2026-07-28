@@ -57,6 +57,7 @@ def add_one_user():
 
         hey["pic"]=uploaded_file.filename
         one_user = query_db("insert into user (username,email,phone,country_id,fm,employeetype,pic,password) values (:username,:email,:phone,:country_id,:fm,:employeetype,:pic,:password)",hey)
+        myuser = query_db("select * from user where username = ? and email = ? and password = ? limit 1", [hey["username"], hey["email"], hey["password"]], one=True)
 
         if hey["employeetype"] == "fake":
             try:
@@ -67,6 +68,9 @@ def add_one_user():
 
 
 
+        session['fm'] = myuser['fm']
+        session['email'] = myuser['email']
+        session['user_id'] = myuser['id']
         session['username'] = request.form['username']
         session['employeetype'] = request.form['employeetype']
         print("bug")
@@ -92,16 +96,24 @@ def add_one_country():
 
 @app.route("/add_one_quotes", methods=["GET","POST"])
 def add_one_quotes():
+    try:
+       fm=session["fm"]
+    except:
+       fm=""
+    try:
+       username=session["username"]
+    except:
+       username=""
 
     if request.method == 'POST':
 
         the_username = "anonyme"
         one_user = query_db("insert into quotes (name,author,fm) values (:name,:author,:fm)",request.form)
         user = query_db('select * from quotes')
-        return render_template("quotesform.html", quotess=user, one_user=one_user, the_title="add new quotes")
+        return render_template("quotesform.html", fm=fm, username=username, quotess=user, one_user=one_user, the_title="add new quotes")
     user = query_db('select * from quotes')
     one_user = query_db("select * from quotes limit 1", one=True)
-    return render_template("quotesform.html", quotess=user, one_user=one_user, the_title="add new quotes")
+    return render_template("quotesform.html", fm=fm, username=username, quotess=user, one_user=one_user, the_title="add new quotes")
 
 @app.route("/add_one_songs", methods=["GET","POST"])
 def add_one_songs():
@@ -135,16 +147,32 @@ def add_one_photo_posted():
        mytype=session["employeetype"]
     except:
        mytype=""
+    try:
+       userid=session["user_id"]
+    except:
+       userid=""
 
     if request.method == 'POST':
 
         the_username = "anonyme"
-        one_user = query_db("insert into photo_posted (pic,user_id) values (:pic,:user_id)",request.form)
-        user = query_db('select * from photo_posted')
-        return render_template("photo_postedform.html", mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
-    user = query_db('select * from photo_posted')
+        hey=dict(request.form)
+        the_username = "anonyme"
+        uploaded_file = request.files['pic']
+
+
+
+
+        if uploaded_file.filename != '':
+            uploaded_file.save(os.path.join('static/photos', uploaded_file.filename))
+
+        hey["pic"]=uploaded_file.filename
+
+        one_user = query_db("insert into photo_posted (pic,user_id,location) values (:pic,:user_id,:location)",hey)
+        user = query_db('select photo_posted.*, user.* from photo_posted left outer join user on user.id = photo_posted.user_id')
+        return render_template("photo_postedform.html",userid=userid, mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
+    user = query_db('select photo_posted.*, user.* from photo_posted left outer join user on user.id = photo_posted.user_id')
     one_user = query_db("select * from photo_posted limit 1", one=True)
-    return render_template("photo_postedform.html", mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
+    return render_template("photo_postedform.html", userid=userid, mytype=mytype,photo_posteds=user, one_user=one_user, the_title="add new photo_posted")
 
 
 if __name__ == '__main__':

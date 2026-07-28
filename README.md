@@ -1,4 +1,8 @@
 # amazon-tea
+![alt text](photoexample2.png)
+![alt text](photoexample1.png)
+
+
 - télécharge le haarcascade_frontalface_default.xml et copie le à la racine
 - ajoute un (e) nouvelle utilisateur pour te connecter
 choisis un sport un quote

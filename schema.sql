@@ -65,5 +65,6 @@ create table if not exists artists(
 create table if not exists photo_posted(
         id integer primary key autoincrement,
         pic text,
+        location text,
             user_id text
                     );
